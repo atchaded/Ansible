@@ -1,0 +1,57 @@
+- name: Install and Configure an IIS site
+  hosts: all
+  tasks:
+
+  - name: IIS and .Net 4.5 are installed
+    win_feature:
+      # Convert the list to a variable
+      name:
+        - Web-Server
+        - NET-Framework-Core
+        - Web-Asp-Net45
+      include_management_tools: True
+      state: present
+
+  - name: Logs directory is created
+    win_file:
+      path: C:\sites\logs
+      state: directory
+
+  - name: Site directory is created
+    # Use a variable for the site path
+    win_file:
+      path: C:\sites\variables
+      state: directory
+
+  - name: Index page for site is installed
+    # Reuse the variable for the site path
+    win_copy:
+      src: 'files/index.html'
+      dest: C:\sites\variables\index.html
+
+  - name: IIS site is created
+    # Use a variable for:
+    #  - The site name
+    #  - The port
+    #  - The host name
+    # Reuse the variable of the site path
+    win_iis_website:
+      name: DO417-variables
+      state: started
+      port: 8080
+      ip: "*"
+      hostname: server.local
+      application_pool: DefaultAppPool
+      physical_path: C:\sites\variables
+      parameters: logfile.directory:C:\sites\logs
+
+  - name: Firewall rule is enabled
+    # Reuse the variable of the site port for 'localport'
+    win_firewall_rule:
+      name: HTTP
+      localport: 8080
+      action: allow
+      direction: in
+      protocol: tcp
+      state: present
+      enabled: yes

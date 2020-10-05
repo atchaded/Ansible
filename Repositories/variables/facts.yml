@@ -1,0 +1,12 @@
+---
+- name: System summary is compiled
+  hosts: all
+  tasks:
+    - name: Product facts are collected
+      CHANGE_ME:
+
+    - name: Disk facts are collected
+      CHANGE_ME:
+
+    - name: Summary is written
+      CHANGE_ME:

@@ -1,0 +1,12 @@
+# create_desktop_file.yml
+# DO417 - Microsoft Windows Automation with Red Hat Ansible
+# ch01s04: architecture-windows-practice
+
+---
+- hosts: win1.example.com
+  tasks:
+
+  - name: A single 'ansible.txt' text file is created
+    win_copy:
+      content: 'This is the win1.example.com server managed by Ansible'
+      dest: C:\Users\devops\desktop\ansible.txt

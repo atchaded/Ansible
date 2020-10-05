@@ -1,0 +1,26 @@
+---
+- name: Manage page files
+  hosts: Windows
+
+  tasks:
+    - name: Obtain page file information
+      win_pagefile:
+      register: orig_pagefile_info
+
+    - name: Show original page file information
+      CHANGE_ME:
+        CHANGE_ME: CHANGE_ME
+
+    - name: Manage page files on virtual machines
+      win_pagefile:
+        remove_all: "{{ CHANGE_ME }}"
+        automatic: "{{ CHANGE_ME }}"
+      register: new_pagefile_info
+
+    - name: Show new page file information
+      CHANGE_ME:
+        CHANGE_ME: CHANGE_ME
+
+    - name: Show current memory information
+      CHANGE_ME:
+        CHANGE_ME: CHANGE_ME

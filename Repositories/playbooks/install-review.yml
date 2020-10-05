@@ -1,0 +1,34 @@
+---
+  # Update the name of the play
+- name: Install web service
+  hosts: all
+  tasks:
+      # Change the name of this task
+    - name: Install service
+      win_feature:
+        name: Web-Server
+        state: present
+
+      # Change the name of this task
+    - name: Start service
+      win_service:
+        name: W3Svc
+        state: started
+
+- name: The default web page is created on win1
+  hosts: win1.example.com
+  tasks:
+      # Change the content of the file
+    - name: Index file is created
+      win_copy:
+        content: "Hello World!"
+        dest: C:\Inetpub\wwwroot\index.html
+
+- name: The default web page is created on win2
+  hosts: win2.example.com
+  tasks:
+      # Change the content of the file
+    - name: Index file is created
+      win_copy:
+        content: "Hello World!"
+        dest: C:\Inetpub\wwwroot\index.html

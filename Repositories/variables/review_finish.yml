@@ -1,0 +1,14 @@
+---
+- name: Revert changes from Variables Lab
+  hosts: Windows
+
+  tasks:
+    - name: Manage page files on virtual machines
+      win_pagefile:
+        automatic: yes
+      register: pagefile_info
+
+    - name: Show current page file information
+      debug:
+        var: pagefile_info
+

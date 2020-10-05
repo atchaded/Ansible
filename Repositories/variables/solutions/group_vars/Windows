@@ -1,0 +1,14 @@
+# Defines the list of features to install on the system
+iis_packages_name:
+  - Web-Server
+  - NET-Framework-Core
+  - Web-Asp-Net45
+
+# Defines the root directory of the IIs site
+iis_site_path: C:\sites\variables
+
+# Defines the IIS site name
+iis_site_name: "DO417-variables"
+
+# Defines the port of the IIS site
+iis_site_port: 8080

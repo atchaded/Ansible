@@ -1,0 +1,60 @@
+---
+- name: Deconfigure time service
+  hosts: all
+  vars:
+    time_key: 'HKLM:\SYSTEM\CurrentControlSet\Services\W32Time'
+
+  tasks:
+    - name: Configure time server type
+      win_regedit:
+        path: '{{ time_key }}\Parameters'
+        name: Type
+        data: AllSync
+        type: string
+      notify: Restart windows time service
+
+    - name: Configure AnnounceFlags
+      win_regedit:
+        path: '{{ time_key }}\Config'
+        name: AnnounceFlags
+        data: 10
+        type: dword
+      notify: Restart windows time service
+
+    - name: Disable NTP time provider
+      win_regedit:
+        path: '{{ time_key }}\TimeProviders\NtpServer'
+        name: Enabled
+        data: 0
+        type: dword
+      notify: Restart windows time service
+
+    - name: Configure upstream servers
+      win_regedit:
+        path: '{{ time_key }}\Parameters'
+        name: NtpServer
+        data: "169.254.169.123,0x9 time.windows.com,0x8"
+        type: string
+      notify: Restart windows time service
+
+    - name: Configure positive time correction
+      win_regedit:
+        path: '{{ time_key }}\Config'
+        name: MaxPosPhaseCorrection
+        data: 0xffffffff
+        type: dword
+      notify: Restart windows time service
+
+    - name: Configure negative time correction
+      win_regedit:
+        path: '{{ time_key }}\Config'
+        name: MaxNegPhaseCorrection
+        data: 0xffffffff
+        type: dword
+      notify: Restart windows time service
+
+  handlers:
+    - name: Restart windows time service
+      win_service:
+        name: W32Time
+        state: restarted

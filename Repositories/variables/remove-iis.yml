@@ -1,0 +1,37 @@
+---
+- name: IIS site is cleaned up
+  hosts: all
+  vars:
+    iis_site_path: C:\sites\variables
+    iis_site_port: 8080
+
+  tasks:
+    - name: Firewall rule is removed
+      win_firewall_rule:
+        name: HTTP
+        localport: "{{ iis_site_port }}"
+        action: allow
+        direction: in
+        protocol: tcp
+        state: absent
+
+    - name: IIS site is removed
+      win_iis_website:
+        name: "{{ item }}"
+        state: absent
+        port: "{{ iis_site_port }}"
+        ip: "*"
+        hostname: "{{ inventory_hostname }}"
+        application_pool: DefaultAppPool
+        physical_path: "{{ iis_site_path }}"
+        parameters: logfile.directory:C:\sites\logs
+      loop:
+        - DO417-variables
+
+    - name: Site directories are removed
+      win_file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - C:\sites\logs
+        - "{{ iis_site_path }}"

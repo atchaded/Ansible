@@ -1,0 +1,17 @@
+---
+- name: IIS is removed
+  hosts: all
+  tasks:
+    - name: Website index.html is removed
+      win_file:
+        path: C:\Inetpub\wwwroot\index.html
+        state: absent
+    - name: IIS service is stopped
+      win_service:
+        name: W3Svc
+        state: stopped
+      ignore_errors: true
+    - name: IIS service is removed
+      win_feature:
+        name: Web-Server
+        state: absent
